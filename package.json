@@ -2,7 +2,7 @@
   "name": "weatherapp_assignment3",
   "version": "1.0.0",
   "description": "ClimaCast is a weather forecast application that provides current weather information, 5-day forecasts, and air quality data for a specified city. It also includes additional details such as sunrise, sunset, humidity, wind, and more.",
-  "main": "app.js",
+  "main": "index.js",
   "engines": {
     "node": "18.x"
   },
