@@ -11,7 +11,6 @@ function hideLoading() {
     weatherContainer.style.display = 'block';
 }
 
-
 const fetchWeatherData = async (city) => {
     try {
         showLoading();
