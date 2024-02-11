@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const routes = require('./routes/routes.js');
 const crypto = require('crypto');
+require('dotenv').config(); 
+
 const app = express();
 
 app.use(express.static('public'));
-const port = 3000;
 
-mongoose.connect('mongodb+srv://aknietmaulen:5pl7MUjLHUeKeKxI@cluster0.g8gqxvn.mongodb.net/?retryWrites=true&w=majority')
+const port = process.env.PORT || 3000;
+
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB Atlas'))
     .catch(err => console.error('Error connecting to MongoDB Atlas:', err));
 
