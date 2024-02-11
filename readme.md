@@ -42,7 +42,7 @@ Make sure you have the following software installed on your machine:
 
 ### Sigh Up and Log In
 Firstly login is required to use this app.
-I recommend using username 'sunki' with password '123'.
+I recommend using username 'user' with password '123'.
 
 ### Search for a City
 To get weather information for a different city:
