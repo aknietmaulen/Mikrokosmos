@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherApp</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="icon" type="image/png" href="/img/weather.png"/>
+</head>
+
+<body style="background-color: powderblue;">
+    <header>
+        <nav class="navbar navbar-expand-lg container">
+            <div class="container-fluid">
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="ms-auto">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active fw-bold" aria-current="page" href="/">WeatherApp</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active fw-bold" href="#contact">Contact me</a>
+                            </li>
+                        <% if (user == false) { %>
+                            <form action="/login" method="get" class="ms-5">
+                                <button class="btn btn-dark btn-outline text-white" type="submit">Login</button>
+                            </form>
+                        <% } else { %>
+                            
+                            <form action="/logout" method="post" class="ms-5 d-flex align-items-center"> 
+                                <p class="mt-3 me-3"><%= user.username%></p>
+                                <button class="btn btn-dark btn-outline text-white h-100" type="submit">Logout</button>
+                            </form>
+                        <% } %>
+                        
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow-1">
+        <div class="container py-5">
+            <div class="search-box">
+                <form class="d-flex" action="/weather" method="post" id="formCityName">
+                    <i class="bx bxs-map"></i>
+                    <input class="form-control " type="text" placeholder="Enter your location" name="city" aria-label="Search" id="cityName">
+                    <button class="btn btn-dark btn-outline text-white" type="submit">Get Weather</button>
+                </form>
+            </div>
+        </div>
+        
+        <% if (user == false) { %>
+            <h1 class="text-center">Please log in or register to get weather data</h1>
+        <% } else { %>
+            <div id="main" class="container py-5">
+                <div>
+                    <h2 class="mb-4">Your History</h2>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        <% for (let i = 0; i < user.length; i++) { %>
+                            <% let data = user[i].timezone.timestamp %>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= user[i].city %></h5>
+                                        <p class="card-text"><%= user[i].timestamp %></p>
+                                        <div class="d-flex align-items-center">
+                                            <% let iconUrl = `http://openweathermap.org/img/w/${user[i].currentWeather.weather[0].icon}.png` %>
+                                            <img src="<%= iconUrl %>" alt="Weather Icon" class="icon_size me-3">
+                                            <p class="card-text"><%= user[i].currentWeather.main.temp %>°C</p>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="/weather/<%= i %>" class="btn btn-dark btn-outline text-white"><i class="bi bi-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>            
+        <% } %>
+    </main>
+    <div id="contact" class="container-fluid">
+        <footer class="py-5">
+            <div class="text-center col-md-9 col-sm-12 mx-auto">
+                <p>&copy; 2023 Akniet Maulen | SE-2204 </p>
+                <p>Email: akniet.maulenova.2017@gmail.com</p>
+                <p>Connect with me: <a href="https://t.me/maulen_akniet" target="_blank">Telegram</a></p>
+                <p>Project: Weather App</p>
+            </div>
+        </footer>
+    </div>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+</body>
+</html>
+
