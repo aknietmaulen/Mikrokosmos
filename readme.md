@@ -33,10 +33,6 @@ Make sure you have the following software installed on your machine:
    ```bash
    npm install
    ```
-4. Run code
-   ```bash
-   node app.js
-   ```
 
 ## Usage
 
