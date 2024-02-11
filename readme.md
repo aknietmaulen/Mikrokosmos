@@ -33,6 +33,10 @@ Make sure you have the following software installed on your machine:
    ```bash
    npm install
    ```
+4. Run code
+   ```bash
+   node app.js
+   ```
 
 ## Usage
 
@@ -48,7 +52,7 @@ To get weather information for a different city:
 
 ## Admin Page
 Admin Page stores user ID, username and encrypted password of all users. Admin can add and delete users.
-Admin username: 'akniet' Password: '123'
+Admin Username: 'akniet' Password: '123'
 
 ## Features
 - Current weather information (temperature, description, icon, date, location, time, etc.).
