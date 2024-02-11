@@ -181,7 +181,7 @@ router.post('/weather', isAuthenticated, async (req, res) => {
             lat: currentWeatherData.coord.lat,
             lon: currentWeatherData.coord.lon
         };
-        res.render('index', { weatherData: responseData, coordinates });
+        res.render('script', { weatherData: responseData, coordinates });
        
     } catch (error) {
         console.error('Error fetching weather data:', error);
@@ -194,7 +194,7 @@ router.get('/weather/:cardId', isAuthenticated, async (req, res) => {
     const cardId = req.params.cardId;
     const history = req.session.user.history;
 
-    res.render('index', { weatherData: history[cardId] });
+    res.render('script', { weatherData: history[cardId] });
 
 });
 
