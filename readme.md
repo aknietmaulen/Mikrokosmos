@@ -1,14 +1,15 @@
-# ClimaCast
+# Weather App
 
-ClimaCast is a weather forecast application that provides current weather information, 5-day forecasts, and air quality data for a specified city. It also includes additional details such as sunrise, sunset, humidity, wind, and more.
+WeatherApp is a weather forecast application that provides current weather and timezone information of the specified city, also the additional weather facts such as humidity, wind, sunrise and sunset time, etc. It also shows the city information from Wikipedia.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
-  - [Default City](#default-city)
+  - [Sigh Up and Log In](#signup-login)
   - [Search for a City](#search-for-a-city)
+- [Admin Page](#admin)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 
@@ -22,7 +23,7 @@ Make sure you have the following software installed on your machine:
 ### Installation
 1. Clone the repository to your local machine.
    ```bash
-   git clone https://github.com/rulik04/WeatherApp
+   git clone https://github.com/aknietmaulen/WeatherApp
    ```
 2. Navigate to the project directory.
    ```bash
@@ -35,21 +36,25 @@ Make sure you have the following software installed on your machine:
 
 ## Usage
 
-### Default City
-The application defaults to displaying weather information for the city of Astana. Simply open the application, and the weather details for Astana will be shown.
+### Sigh Up and Log In
+Firstly login is required to use this app.
+I recommend using username 'sunki' with password '123'.
 
 ### Search for a City
 To get weather information for a different city:
 1. Enter the desired city name in the search input.
-2. Click the "Get Weather" button or press Enter.
-3. The application will fetch and display the weather details for the specified city.
+2. Click the "Get Weather" button.
+3. The application will display the weather information for the specified city.
+
+## Admin Page
+Admin Page stores user ID, username and encrypted password of all users. Admin can add and delete users.
+Admin username: 'akniet' Password: '123'
 
 ## Features
 - Current weather information (temperature, description, icon, date, location, time, etc.).
-- 5-day forecast with temperature and date details.
-- Air quality information (SO2, NO2, O3, PM2.5).
-- Highlights such as sunrise, sunset, humidity, clouds, wind, and feels-like temperature.
-- Map display with a marker for the selected city.
+- City information from Wikipedia.
+- Highlights such as humidity, clouds, wind, sunrise, sunset, and feels-like temperature.
+
 
 ## Technologies Used
 - HTML
@@ -58,4 +63,4 @@ To get weather information for a different city:
 - Node.js (Express)
 - OpenWeatherMap API
 - TimezoneDB API
-- Google Maps JavaScript API
+- Wikipedia API
