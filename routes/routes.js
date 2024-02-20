@@ -68,7 +68,11 @@ router.post('/login', async (req, res) => {
             const role = (username === 'akniet' && password === '123') ? 'admin' : 'regular';
             
             req.session.user = { ...user.toObject(), role }; 
-            res.redirect('/admin');
+            if (role =='admin') {
+                res.redirect('/admin');
+            } else{
+                res.redirect('/main');
+            }
         } else {
             return res.status(400).send({ message: 'Incorrect password' });
         }
