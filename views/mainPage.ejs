@@ -28,7 +28,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active fw-bold" href="#contact">Contact me</a>
                             </li>
-                        <% if (user == false) { %>
+                        <% if (!user) { %>
                             <form action="/login" method="get" class="ms-5">
                                 <button class="btn btn-dark btn-outline text-white" type="submit">Login</button>
                             </form>

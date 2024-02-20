@@ -68,9 +68,11 @@ router.post('/login', async (req, res) => {
             const role = (username === 'akniet' && password === '123') ? 'admin' : 'regular';
             
             req.session.user = { ...user.toObject(), role }; 
-            if (role =='admin') {
+            if (role === 'admin') {
                 res.redirect('/admin');
+                return; 
             } else{
+                req.session.user = user;
                 res.redirect('/main');
             }
         } else {
