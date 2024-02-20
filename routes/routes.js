@@ -9,11 +9,28 @@ router.get('/', (req, res) => {
     res.redirect('/main');
 });
 
+const isAuthenticated = (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+};
+
+const isAdmin = (req, res, next) => {
+    if (req.session.user && req.session.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).send('Forbidden'); 
+    }
+};
+
 router.get('/login', (req, res) => {
     res.render('login', { message: false });
 });
 
-router.get('/admin', async (req, res) => {
+
+router.get('/admin', isAdmin, async (req, res) => {
     try {
         const users = await User.find({});
         res.render('admin', { users });
@@ -23,15 +40,21 @@ router.get('/admin', async (req, res) => {
     }
 });
 
+// router.get('/admin', async (req, res) => {
+//     try {
+//         const users = await User.find({});
+//         res.render('admin', { users });
+//     } catch (error) {
+//         console.error('Error fetching users:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        if (username === 'akniet' && password === '123') {
-            res.redirect('/admin');
-            return; 
-        }
-
         const user = await User.findOne({ username });
 
         if (!user) {
@@ -41,8 +64,11 @@ router.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (isMatch) {
-            req.session.user = user;
-            res.redirect('/main');
+            // check if the user is 'akniet', if so, set their role as 'admin'
+            const role = (username === 'akniet' && password === '123') ? 'admin' : 'regular';
+            
+            req.session.user = { ...user.toObject(), role }; 
+            res.redirect('/admin');
         } else {
             return res.status(400).send({ message: 'Incorrect password' });
         }
@@ -53,12 +79,15 @@ router.post('/login', async (req, res) => {
 });
 
 
+
 router.get('/signup', (req, res) => {
     res.render('signup');
 });
 
 router.post('/signup', async (req, res) => {
     const { username, password } = req.body;
+
+    const role = (username === 'akniet' && password === '123') ? 'admin' : 'regular';
 
     const existingUser = await User.findOne({ username });
 
@@ -68,26 +97,19 @@ router.post('/signup', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({ username, password: hashedPassword });
+    const user = new User({ username, password: hashedPassword, role }); 
 
     await user.save();
     
     res.render('login', { message: true});
 });
 
+
 router.post('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/login');
 });
 
-const isAuthenticated = (req, res, next) => {
-    if (req.session.user) {
-        next();
-    } else {
-
-        res.send({ message: 'You must login' });
-    }
-};
 
 router.get('/main', async (req, res) => {
     if (!req.session.user) {
@@ -199,7 +221,7 @@ router.get('/weather/:cardId', isAuthenticated, async (req, res) => {
 });
 
 
-router.post('/admin/add-user', async (req, res) => {
+router.post('/admin/add-user', isAdmin, async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -223,7 +245,7 @@ router.post('/admin/add-user', async (req, res) => {
 
 
 
-router.post('/admin/delete-user', async (req, res) => {
+router.post('/admin/delete-user', isAdmin, async (req, res) => {
     try {
         const userId = req.body.userId;
 
