@@ -3,11 +3,16 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const routes = require('./routes/routes.js');
 const crypto = require('crypto');
+const methodOverride = require('method-override');
 require('dotenv').config(); 
 
 const app = express();
 
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
+app.use('/public/uploads', express.static('public/uploads'));
+
+
 
 const port = process.env.PORT || 3000;
 

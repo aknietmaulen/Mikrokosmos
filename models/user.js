@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role:  { type: String },
-    history: { type: Array, required: false }
-});
+    role:  { type: String, required: true, default: 'user' },
+    createdAt: { type: Date, default: Date.now, required: true},
+    updatedAt: { type: Date, default: Date.now, required: true},});
 
 const User = mongoose.model('User', userSchema);
 

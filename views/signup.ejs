@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
     <title>SignUp</title>
     <link rel="stylesheet" href="/css/style.css">
-
     <style>
         .form-container {
             width: 100%;
             max-width: 400px;
+            color:black;
             margin: 0 auto;
+            background-color: white;
+            margin-top: 100px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
-            background-color: powderblue;
-            margin-top: 100px;
         }
 
         .form-group {
@@ -23,34 +23,17 @@
             width: 100%;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
         .form-group input {
             width: 95%;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #997c7c;
             border-radius: 5px;
             outline: none;
         }
 
-        p {
-            text-align: center;
-        }
-
-        p a {
-            color: black;
-            text-decoration: none;
-        }
-        a {
-            color: black;
-            text-decoration: none;
-        }
-
-        p a:hover {
-            text-decoration: underline;
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
         }
 
         button {
@@ -59,11 +42,42 @@
             border: none;
             border-radius: 5px;
             background-color: black;
-            color: #fff;
+            color: white;
             cursor: pointer;
             outline: none;
         }
         
+        p {
+            margin-top: 2%;
+            text-align: center;
+            color: black;
+        }
+
+        p a {
+            color: black;
+            text-decoration: underline;
+        }
+
+        #successModal {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background-color: rgb(181, 214, 218);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 25%;
+            border-radius: 5px;
+            position: relative;
+        }  
     </style>
 </head>
 <body>
@@ -75,15 +89,49 @@
         <form action="/signup" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="username" placeholder="Enter your username " required autocomplete="off">
+                <input type="text" name="username" placeholder="Enter your username" required autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" placeholder="Enter password" required>
+                <p id="passwordError" style="color: rgb(147, 0, 0); display: none;">Password must be at least 6 characters long.</p>
+
+
+                <% if (message == "user already exists") { %>
+                    <p style="color: rgb(163, 0, 0);">User already exists</p>
+                <% } %>
             </div>
             <button class="btn btn-dark btn-outline text-white" type="submit">Sign Up</button>
         </form>
+        <% if (message == "user created successfully") { %>
+            <div id="successModal" class="modal">
+                <div class="modal-content">
+                    <p style="font-size: 1.5em;">Account created successfully!</p>
+                    <button id="closeModal">Close</button>
+                </div>
+            </div>
+        <% } %>
     </div>
+    <script>
+        function validateForm() {
+            var passwordInput = document.getElementById('password');
+            var passwordError = document.getElementById('passwordError');
+
+            if (passwordInput.value.length < 6) {
+                passwordError.style.display = 'block';
+                return false;
+            } else {
+                passwordError.style.display = 'none';
+                return true; 
+            }
+        }
+
+        let modal = document.getElementById('successModal');
+        let btn = document.getElementById("closeModal");
+        btn.onclick = function() {
+            modal.style.display = "none";
+        }
+    </script>
 </body>
 </html>

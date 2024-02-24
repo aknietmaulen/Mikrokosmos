@@ -8,77 +8,316 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="icon" type="image/png" href="/img/weather.png"/>
+    <style> 
+    body {
+        font-family: "Poppins", sans-serif;
+        background-color:  rgb(0, 0, 57);
+        color:  #e2deed;
+    }       
+    
+    .modal-content{
+        background-color: #2e273c;
+    }
+
+    .a-table, .a-table table, .a-table table thead, .a-table table tbody, .a-table table tr, .a-table table th, .a-table table td{
+        background-color:#2e273c;
+        padding: 20px;
+        color: white;
+        border-radius: 10px;
+    }
+    </style>
 </head>
 
-<body style="background-color: powderblue;">
+<body>
     <header>
         <nav class="navbar navbar-expand-lg container">
-            <div class="container-fluid">
-                
+            <div class="container">
+                <a class="navbar-brand text-light" href="/">Mikrokosmos</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-        
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <div class="ms-auto">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link active fw-bold" aria-current="page" href="/main">WeatherApp</a>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">    
+                        <li class="nav-item">
+                            <a class="nav-link text-light active" href="/apod">APOD</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/nasa-news">News</a>
+                        </li>
+                    </ul>
+                    <% if (user == "notUser") { %>
+                        <form action="/login" method="get" class="ms-2">
+                            <button class="btn btn-outline-primary text-white" type="submit">Login</button>
+                        </form>
+                    <% } else { %>
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-fill"></i>
+                                    <%= user.username%>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/history">History</a></li>
+                                    <li><hr class="dropdown-divider"></li>    
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
                             </li>
                         </ul>
-                    </div>
-                </div>
+                    <% } %>
+                </div>        
             </div>
         </nav>
     </header>
-    <main>
-        <div class="container mt-5">
-            <h1>Welcome to the Admin Panel</h1>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">User ID</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Password</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% users.forEach(user => { %>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/addUser" method="post">
+                <div class="modal-body mb-2">
+                        <label for="name">User name</label>
+                        <input class="form-control" type="text" placeholder="User name..." name="username">
+                        <label for="password">Password</label>
+                        <input class="form-control" type="password" placeholder="Password..." name="password">
+                        <label for="role">Role</label>
+                        <select class="form-control" name="role">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editUserModalLabel">Edit User</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editUserForm" method="post" action="/editUser">
+                    <div class="modal-body">
+                        <input type="hidden" id="editUserId" name="userId">
+                        <label for="editUsername">User name</label>
+                        <input class="form-control" type="text" placeholder="Enter username" id="editUsername" name="username">
+                    
+                        <label for="editRole">Role</label>
+                        <select class="form-control" id="editRole" name="role">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Item Modal -->
+    <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editItemForm" action="/editItem" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" id="editItemId" name="itemId">
+                        <div class="mb-3">
+                            <label for="editItemName" class="form-label">Name (English)</label>
+                            <input type="text" class="form-control" id="editItemName" name="itemName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemRussianName" class="form-label">Name (Russian)</label>
+                            <input type="text" class="form-control" id="editItemRussianName" name="itemRussianName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemDescriptionEnglish" class="form-label">Description (English)</label>
+                            <textarea class="form-control" id="editItemDescriptionEnglish" name="itemDescriptionEnglish" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemDescriptionRussian" class="form-label">Description (Russian)</label>
+                            <textarea class="form-control" id="editItemDescriptionRussian" name="itemDescriptionRussian" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editNewItemImages" class="form-label">New Images</label>
+                            <input type="file" class="form-control" id="editNewItemImages" name="newItemImages" multiple>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <section class="a-table container mb-5">
+        <div class="row">
+            <div class="col">
+                <h2 class="text-center mb-4">Users</h2>
+                <button type="button" class="btn btn-primary d-flex justify-content-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Add User</button>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td><%= user._id %></td>
-                                <td><%= user.username %></td>
-                                <td><%= user.password %></td>
-                                <td>
-                                    <form action="/admin/delete-user" method="post">
-                                        <input type="hidden" name="userId" value="<%= user._id %>">
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Creation Date</th>
+                            <th>Updated Date</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach(user => { %>
+                                <tr>
+                                    <td><%= user._id %></td>
+                                    <td><%= user.username %></td>
+                                    <td><%= user.role %></td>
+                                    <td>
+                                        <% 
+                                        const createdAt = new Date(user.createdAt);
+                                        const formattedDate = createdAt.getDate() + '-' + (createdAt.getMonth() + 1) + '-' + createdAt.getFullYear();
+                                        %>
+                                        <%= formattedDate %>
+                                    </td>
+                                    <td>
+                                        <% 
+                                        const updatedAt = new Date(user.updatedAt);
+                                        const formattedDate2 = updatedAt.getDate() + '-' + (updatedAt.getMonth() + 1) + '-' + updatedAt.getFullYear();
+                                        %>
+                                        <%= formattedDate2 %>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-around">
+                                            <button type="button" class="btn btn-warning editUserBtn me-3" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user-id="<%= user._id %>" data-username="<%= user.username %>"  data-role="<%= user.role %>">Edit</button>
+                                            <form action="/deleteUser/<%= user._id %>" method="post">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="col-8 align-items-center mx-auto">
+        <form action="/admin/add-item" method="POST"  enctype="multipart/form-data" onsubmit=" return validateForm()">
+            <div class="mb-3">
+                <label for="pictures" class="form-label">Pictures (Upload 3 Images)</label>
+                <input type="file" class="form-control" id="pictures" name="pictures" accept="image/*" multiple required>
+            </div>
+            <div class="mb-3">
+                <label for="nameEnglish" class="form-label">Name (English)</label>
+                <input type="text" class="form-control" id="nameEnglish" name="nameEnglish" required>
+            </div>
+            <div class="mb-3">
+                <label for="nameRussian" class="form-label">Name (Russian)</label>
+                <input type="text" class="form-control" id="nameRussian" name="nameRussian" required>
+            </div>
+            <div class="mb-3">
+                <label for="descriptionEnglish" class="form-label">Description (English)</label>
+                <textarea class="form-control" id="descriptionEnglish" name="descriptionEnglish" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="descriptionRussian" class="form-label">Description (Russian)</label>
+                <textarea class="form-control" id="descriptionRussian" name="descriptionRussian" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Item</button>
+        </form>
+    </div>
+    
+
+    <section class="a-table container mt-5">  
+        <div class="table-responsive">
+            <table class="table">
+                <h2>Items</h2>
+                <thead>
+                    <tr>
+                        <th>Name (English)</th>
+                        <th>Name (Russian)</th>
+                        <th>Description (English)</th>
+                        <th>Description (Russian)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% items.forEach(function(item) { %>
+                        <tr>
+                            <td><%= item.names.english %></td>
+                            <td><%= item.names.russian %></td>
+                            <td><%= item.descriptions.english %></td>
+                            <td><%= item.descriptions.russian %></td>
+                            <td>
+                                <div class="d-flex justify-content-around">
+                                    <button type="button" class="btn btn-warning editItemBtn me-3" data-bs-toggle="modal" data-bs-target="#editItemModal" data-item-id="<%= item._id %>" data-item-name="<%= item.names.english %>" data-item-russian-name="<%= item.names.russian %>" data-item-description-english="<%= item.descriptions.english %>" data-item-description-russian="<%= item.descriptions.russian %>">Edit</button>
+                                    <form action="/deleteItem/<%= item._id %>?_method=DELETE" method="post">
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-        </div>   
-        <div class="container mt-5">
-            <form action="/admin/add-user" method="post" class="mx-auto justify-content-center">
-                <div class="col-9 mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                </div>
-                <div class="col-9 mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Add User</button>
-            </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
         </div>
-
-    </main>
         
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-   <script src="../admin.js"></script>
+    </section>  
+        
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+                let editButtons = document.querySelectorAll('.editItemBtn');
+
+                editButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        let itemId = button.getAttribute('data-item-id');
+                        let itemName = button.getAttribute('data-item-name');
+                        let itemRussianName = button.getAttribute('data-item-russian-name');
+                        let itemDescriptionEnglish = button.getAttribute('data-item-description-english');
+                        let itemDescriptionRussian = button.getAttribute('data-item-description-russian');
+
+                        document.getElementById('editItemId').value = itemId;
+                        document.getElementById('editItemName').value = itemName;
+                        document.getElementById('editItemRussianName').value = itemRussianName;
+                        document.getElementById('editItemDescriptionEnglish').value = itemDescriptionEnglish;
+                        document.getElementById('editItemDescriptionRussian').value = itemDescriptionRussian;
+                    });
+                });
+        });
+
+        function validateForm() {
+                let pictures = document.getElementById('pictures').files;
+                if (pictures.length !== 3) {
+                    alert('Please upload exactly 3 images.');
+                    return false;
+                }
+                return true; 
+            }
+    </script>
+    
+    
+    <script src="/js/admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
