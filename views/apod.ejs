@@ -60,7 +60,7 @@
                             <a class="nav-link text-light active" href="/apod">APOD</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="/nasa-news">News</a>
+                            <a class="nav-link text-light" href="/nasa_news">News</a>
                         </li>
                     </ul>
                     <% if (user == "notUser") { %>
@@ -88,32 +88,13 @@
         </nav>
     </header>
 
-
-
-    <main>
-        <div class="containerNews">
-            <h1>NASA News</h1>
-            <% articles.forEach(article => { %>
-                <div class="article">
-                    <h2><%= article.title %></h2>
-                    <% if (article.urlToImage) { %>
-                        <img src="<%= article.urlToImage %>" alt="Article Image">
-                    <% } %>
-                    <p><%= article.description %></p>
-                    <p>Published At: <%= new Date(article.publishedAt).toLocaleString() %></p>
-                    <p>Source: <%= article.source.name %></p>
-                    <p><a href="<%= article.url %>" target="_blank">Read More</a></p>
-                </div>
-            <% }) %>
-        </div>    
-    </main>
     <div id="contact" class="container-fluid">
         <footer class="py-5">
             <div class="text-center col-md-9 col-sm-12 mx-auto">
                 <p>&copy; 2023 Akniet Maulen | SE-2204 </p>
                 <p>Email: akniet.maulenova.2017@gmail.com</p>
                 <p>Connect with me: <a href="https://t.me/maulen_akniet" target="_blank">Telegram</a></p>
-                <p>Project: Stellar | NASA App</p>
+                <p>Project: Mikrokosmos | NASA App</p>
             </div>
         </footer>
     </div>

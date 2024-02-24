@@ -76,7 +76,7 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password} = req.body;
 
     const user = await User.db.collection('users').findOne({ username });
 
@@ -280,8 +280,8 @@ router.post('/editItem', upload.array('newItemImages', 3), async (req, res) => {
 
 
 
-router.get('/profile', isAuthenticated, (req, res) => {
-    res.render('profile', { user: req.session.user, message: false});
+router.get('/account', isAuthenticated, (req, res) => {
+    res.render('account', { user: req.session.user, message: false});
 });
 
 
@@ -289,7 +289,7 @@ router.put('/change-user-data', isAuthenticated, async (req, res) => {
     const { username, role } = req.body;
     const user = await User.findByIdAndUpdate(req.session.user._id, { username, role }, { new: true });
     req.session.user = user;
-    res.render('profile', { user: req.session.user });
+    res.render('account', { user: req.session.user });
 });
 
 
@@ -298,12 +298,12 @@ router.put('/change-password', isAuthenticated, async (req, res) => {
     const isMatch = await bcrypt.compare(oldPassword, req.session.user.password);
 
     if (!isMatch) {
-        res.render('profile', { user: req.session.user, message: 'password is incorrect'});
+        res.render('account', { user: req.session.user, message: 'password is incorrect'});
     }
     newPassword = await bcrypt.hash(newPassword, 10);
     const user = await User.findByIdAndUpdate(req.session.user._id, { password: newPassword }, { new: true });
     req.session.user = user;
-    res.render('profile', { user: req.session.user });
+    res.render('account', { user: req.session.user });
 });
 
 

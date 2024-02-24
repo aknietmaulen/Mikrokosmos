@@ -25,25 +25,23 @@
 
 </head>
 <body>
-    <header class="mb-5">
-        <nav class="navbar navbar-expand-lg text-light header-bg">
+    <header>
+        <nav class="navbar navbar-expand-lg container">
             <div class="container">
-                <img src="/img/logo3.jpg" alt="" style="width: 70px; height: 70px; border-radius: 5px;" class="me-3">
-                <a class="navbar-brand text-light" href="/">CodeQuizHub</a>
+                <a class="navbar-brand text-light" href="/">Mikrokosmos</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">    
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="/quizzes">Quizzes</a>
+                            <a class="nav-link text-light active" href="/apod">APOD</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="/programming-news">News</a>
+                            <a class="nav-link text-light" href="/nasa_news">News</a>
                         </li>
                     </ul>
-                    
-                    <% if (user == "noLogin") { %>
+                    <% if (user == "notUser") { %>
                         <form action="/login" method="get" class="ms-2">
                             <button class="btn btn-outline-primary text-white" type="submit">Login</button>
                         </form>
@@ -55,10 +53,10 @@
                                     <%= user.username%>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/account">Profile</a></li>
                                     <li><a class="dropdown-item" href="/history">History</a></li>
                                     <li><hr class="dropdown-divider"></li>    
-                                    <li><a class="dropdown-item" href="/logout">Exit</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -80,7 +78,6 @@
                             <h1 class="text-center">Profile</h1>
                             <hr>
                             <h3>Username: <%= user.username %></h3>
-                            <h3>Email: <%= user.email %></h3>
                             <h3>Registration Date: <%= user.createdAt %></h3>
                             <h3>Updated At: <%= user.updatedAt %></h3>
                         </div>
@@ -95,7 +92,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
-                                <h1 class="">Change Data</h1>
+                                <h1 class="">Change Username</h1>
                                 <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#changeDataCollapse" aria-expanded="false" aria-controls="changeDataCollapse">
                                     <i class="bi bi-arrow-bar-down fs-1"></i>
                                 </button>
@@ -106,11 +103,7 @@
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Change Data</button>
+                                    <button type="submit" class="btn btn-primary">Change username</button>
                                 </form>
                             </div>
                         </div>

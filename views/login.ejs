@@ -6,6 +6,12 @@
     <title>Login</title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color:  rgb(0, 0, 57);
+            color:  #e2deed;
+            text-align: center;
+        }     
         p {
             margin-top: 2%;
             text-align: center;
@@ -16,6 +22,67 @@
             color: black;
             text-decoration: underline;
         }
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            color:black;
+            margin: 0 auto;
+            background-color: white;
+            margin-top: 100px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .form-group input {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #997c7c;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #successModal {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        } 
+
+        button {
+            width: 95%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            outline: none;
+        }
+        .modal-content {
+            background-color: rgb(178, 208, 212);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 25%;
+            border-radius: 5px;
+            position: relative;
+        }  
+
     </style>
 </head>
 <body>
@@ -37,13 +104,30 @@
             <% } %>
 
             <% if (message == "password is incorrect") { %>
-                <div style="color: red; margin-bottom: 5px;">The user name or password is incorrect</div>
+                <div style="color: red; margin-bottom: 5px;">The username or password is incorrect</div>
             <% } %>
             <div id="errorMessage" style="color: red; display: none;"></div>
 
             <button type="submit">Login</button>
             <p>Don't have an account? <a href="/signup">Sign up</a></p>
         </form>
+
+        <% if (message == "user created successfully") { %>
+            <div id="successModal" class="modal">
+                <div class="modal-content">
+                    <p style="font-size: 1.5em;">Account created successfully!</p>
+                    <button id="closeModal">Close</button>
+                </div>
+            </div>
+        <% } %>
     </div>
+
+    <script>
+        let modal = document.getElementById('successModal');
+        let btn = document.getElementById("closeModal");
+        btn.onclick = function() {
+            modal.style.display = "none";
+        }
+    </script>
 </body>
 </html>
