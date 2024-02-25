@@ -5,6 +5,7 @@ const Item = require('../models/item');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const { ObjectId } = require('mongodb');
+const axios = require('axios'); 
 
 
 const storage = multer.diskStorage({
@@ -25,92 +26,75 @@ const isAuthenticated = (req, res, next) => {
         res.redirect('/login');
     }
 };
-
 router.get('/login', (req, res) => {
+    res.render('login', { message: false });
+});
+
+router.post('/login', async (req, res) => {
     try {
-        res.render('login', { message: false });
-    }
-    catch (error) {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.render('login', { message: "user not found" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.render('login', { message: "password is incorrect" });
+        }
+
+        req.session.user = user;
+        
+        if (req.session.user.role === 'admin') {
+            res.redirect('/admin');
+        } else {
+            res.redirect('/');
+        }
+    } catch (error) {
         console.error('Error:', error);
         res.status(500).render('error', { errorMessage: 'Internal Server Error' });
     }
 });
 
+// Signup route
 router.get('/signup', (req, res) => {
     res.render('signup', { message: false });
 });
 
 router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
+    try {
+        const { username, password } = req.body;
+        const existingUser = await User.findOne({ username });
 
-    const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.render('signup', { message: "user already exists" });
+        }
+        if (password.length < 6 ) {
+            return res.render('signup', { message: "password must be at least 6 characters" });
+        }
 
-    if (existingUser) {
-        return res.status(400).send({ message: 'user already exists' });
-    }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, password: hashedPassword });
+        await user.save();
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new User({ username, password: hashedPassword });
-    await user.save();
-    
-    res.render('login', { message: "user created successfully"});
-});
-
-router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
-
-    const existingUser = await User.findOne({ username });
-
-    if (existingUser) {
-        res.render('signup', { message: "user already exists" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new User({ username, password: hashedPassword });
-    await user.save();
-
-    
-    res.render('login', { message: "user created successfully"});
-});
-
-router.post('/login', async (req, res) => {
-    const { username, password} = req.body;
-
-    const user = await User.db.collection('users').findOne({ username });
-
-    if (!user) {
-        res.render('login', { message: "user not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-        req.session.user = user;
-    }
-    if (!isMatch) {
-        res.render('login', { message: "password is incorrect" });
-    }
-    if (req.session.user.role === 'admin') {
-        res.redirect('/admin');
-    } else {
-        res.redirect('/');
+        res.render('login', { message: "user created successfully" });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).render('error', { errorMessage: 'Internal Server Error' });
     }
 });
 
-
+// Logout route
 router.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
 
-
-const axios = require('axios'); // Assuming you're using Axios for HTTP requests
-const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb';
-
 router.get('/', async (req, res) => {
     try {
-        // Calculate the dates for the previous 6 days
+        const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb';
+
         const today = new Date();
         const dates = [];
         for (let i = 1; i <= 6; i++) {
@@ -286,22 +270,25 @@ router.get('/account', isAuthenticated, (req, res) => {
 
 
 router.put('/change-user-data', isAuthenticated, async (req, res) => {
-    const { username, role } = req.body;
-    const user = await User.findByIdAndUpdate(req.session.user._id, { username, role }, { new: true });
+    const { username } = req.body;
+    const user = await User.findByIdAndUpdate(req.session.user._id, { username }, { new: true });
     req.session.user = user;
-    res.render('account', { user: req.session.user });
+    res.render('account', { user: req.session.user, message: false });
 });
 
 
 router.put('/change-password', isAuthenticated, async (req, res) => {
     const { oldPassword, newPassword } = req.body;
+    // console.log(oldPassword);
+    // console.log(newPassword);
+    // console.log(req.session.user.password);
     const isMatch = await bcrypt.compare(oldPassword, req.session.user.password);
 
     if (!isMatch) {
-        res.render('account', { user: req.session.user, message: 'password is incorrect'});
+        return res.render('account', { user: req.session.user, message: 'password is incorrect'});
     }
-    newPassword = await bcrypt.hash(newPassword, 10);
-    const user = await User.findByIdAndUpdate(req.session.user._id, { password: newPassword }, { new: true });
+    newPass = await bcrypt.hash(newPassword, 10);
+    const user = await User.findByIdAndUpdate(req.session.user._id, { password: newPass }, { new: true });
     req.session.user = user;
     res.render('account', { user: req.session.user });
 });

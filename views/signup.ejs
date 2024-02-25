@@ -65,7 +65,7 @@
         }
 
         .modal-content {
-            background-color: rgb(181, 214, 218);
+            background-color: rgba(0, 71, 133, 0.782);
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
@@ -90,29 +90,17 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" placeholder="Enter password" required>
-                <p id="passwordError" style="color: rgb(147, 0, 0); display: none;">Password must be at least 6 characters long.</p>
-
+                <p id="passwordError" style="color: rgb(147, 0, 0); display: none;">Password must be at least 6 characters.</p>
 
                 <% if (message == "user already exists") { %>
                     <p style="color: rgb(163, 0, 0);">User already exists</p>
+                <% } %>
+                <% if (message == "password must be at least 6 characters") { %>
+                    <p style="color: rgb(163, 0, 0);">Password must be at least 6 characters</p>
                 <% } %>
             </div>
             <button class="btn btn-dark btn-outline text-white" type="submit">Sign Up</button>
         </form>
     </div>
-    <script>
-        function validateForm() {
-            var passwordInput = document.getElementById('password');
-            var passwordError = document.getElementById('passwordError');
-
-            if (passwordInput.value.length < 6) {
-                passwordError.style.display = 'block';
-                return false;
-            } else {
-                passwordError.style.display = 'none';
-                return true; 
-            }
-        }
-    </script>
 </body>
 </html>
