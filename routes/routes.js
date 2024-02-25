@@ -136,8 +136,6 @@ router.get('/admin', isAuthenticated, async (req, res) => {
         try {
             const users = await User.db.collection('users').find().toArray();
             const items = await Item.find();
-            // const users = await User.find({});
-            // console.log(users);
             res.render('admin', { users: users, user: req.session.user, items: items});
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -158,16 +156,26 @@ router.post('/addUser', async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword, role, createdAt: new Date(), updatedAt: new Date()});
+
+        const newUser = new User({ 
+            username, 
+            password: hashedPassword, 
+            role, 
+            createdAt: new Date(),
+            updatedAt: new Date()
+        });
+
         await newUser.save();
-        
+
         res.redirect('/admin');
     } catch (error) {
         console.error('Error adding user:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 
 router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
