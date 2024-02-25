@@ -182,8 +182,8 @@ router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
     const userId = req.params.userId;
 
     try {
-        await User.db.collection('users').deleteOne({ _id: new ObjectId(userId)});
-
+        await User.findByIdAndDelete(userId);
+        
         res.redirect('/admin');
     } catch (error) {
         console.error('Error deleting user:', error);
