@@ -152,26 +152,23 @@ router.get('/admin', isAuthenticated, async (req, res) => {
 
 router.post('/addUser', async (req, res) => {
     const { username, password, role } = req.body; 
-    // console.log(username, password, role);
     try {
         const existingUser = await User.findOne({ username });
 
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
-
         const hashedPassword = await bcrypt.hash(password, 10);
-
         const newUser = new User({ username, password: hashedPassword, role, createdAt: new Date(), updatedAt: new Date()});
-
         await newUser.save();
-
+        
         res.redirect('/admin');
     } catch (error) {
         console.error('Error adding user:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
     const userId = req.params.userId;
