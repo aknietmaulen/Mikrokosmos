@@ -88,10 +88,10 @@ router.post('/signup', async (req, res) => {
 // Logout route
 router.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/');
+    res.redirect('/mainPage');
 });
 
-router.get('/', async (req, res) => {
+router.get('/mainPage', async (req, res) => {
     try {
         const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb';
 
