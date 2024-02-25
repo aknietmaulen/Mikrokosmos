@@ -91,7 +91,11 @@ router.get('/logout', (req, res) => {
     res.redirect('/mainPage');
 });
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
+    res.redirect('/mainPage');
+});
+
+router.get('/mainPage', async (req, res) => {
     try {
         const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb';
 
