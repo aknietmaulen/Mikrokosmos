@@ -136,6 +136,8 @@ router.get('/admin', isAuthenticated, async (req, res) => {
         try {
             const users = await User.db.collection('users').find().toArray();
             const items = await Item.find();
+            // const users = await User.find({});
+            // console.log(users);
             res.render('admin', { users: users, user: req.session.user, items: items});
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -150,6 +152,7 @@ router.get('/admin', isAuthenticated, async (req, res) => {
 
 router.post('/addUser', async (req, res) => {
     const { username, password, role } = req.body; 
+
     try {
         const existingUser = await User.findOne({ username });
 
@@ -182,8 +185,8 @@ router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
     const userId = req.params.userId;
 
     try {
-        await User.findByIdAndDelete(userId);
-        
+        await User.db.collection('users').deleteOne({ _id: new ObjectId(userId)});
+
         res.redirect('/admin');
     } catch (error) {
         console.error('Error deleting user:', error);
