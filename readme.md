@@ -45,6 +45,7 @@ Make sure you have the following software installed on your machine:
 
 ### Some Explanation
 'Astronomy Picture of the Day' is a NASA API to get photo(or video sometimes) that was taken by NASA at that day.
+**IMPORTANT**: Input date should be **from 16.06.1995 until today.**
 
 ### Sigh Up and Log In
 Firstly login is required to use this app.
@@ -64,7 +65,7 @@ Admin also can add items (in my case, Space Objects) to the main page.
 Admin Username: 'akniet' Password: '1234567'
 
 ## Features
-- APOD for today and any date from 2000.01.01 until today.
+- APOD for today and any date from 1995.06.16 until today.
 - Along with APOD title, date and explanation of the photo/video.
 - TOP-10 NASA news.
 - Profile for user, where user can change user data(username/password).
