@@ -6,6 +6,7 @@ const APOD = require('../models/apod');
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
+const session = require('express-session');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
