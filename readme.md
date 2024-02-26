@@ -1,14 +1,17 @@
-# Weather App
+# Mikrokosmos
 
-WeatherApp is a weather forecast application that provides current weather and timezone information of the specified city, also the additional weather facts such as humidity, wind, sunrise and sunset time, etc. It also shows the city information from Wikipedia.
+**Mikrokosmos** is a cosmos related user-friendly web application that provides users with a convenient way to explore and learn about astronomy-related content, including the APOD(Astronomy Picture of the Day) feature and NASA news, while also offering personalized features such as user authentication and viewing history. The term 'Microkosmos' dedicated to popular group BTS's song.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+  - [Some Explanation](#some-info)
   - [Sigh Up and Log In](#signup-login)
   - [Search for a City](#search-for-a-city)
+  - [How to get APOD](#get-APOD)
+  - [How to get News](#get-news)
 - [Admin Page](#admin)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -23,11 +26,11 @@ Make sure you have the following software installed on your machine:
 ### Installation
 1. Clone the repository to your local machine.
    ```bash
-   git clone https://github.com/aknietmaulen/WeatherApp
+   git clone https://github.com/aknietmaulen/Mikrokosmos
    ```
 2. Navigate to the project directory.
    ```bash
-   cd WeatherApp
+   cd Mikrokosmos
    ```
 3. Install dependencies.
    ```bash
@@ -40,24 +43,32 @@ Make sure you have the following software installed on your machine:
 
 ## Usage
 
+### Some Explanation
+'Astronomy Picture of the Day' is a NASA API to get photo(or video sometimes) that was taken by NASA at that day.
+
 ### Sigh Up and Log In
 Firstly login is required to use this app.
-I recommend using username 'user' with password '123'.
+I recommend using username 'user' with password '123456'.
 
-### Search for a City
-To get weather information for a different city:
-1. Enter the desired city name in the search input.
-2. Click the "Get Weather" button.
-3. The application will display the weather information for the specified city.
+### How to get APOD
+There are two ways to get APOD :
+1. After login, in main page press "Let's go" button.
+2. Choose APOD in navbar.
+
+### How to get News
+1. Choose News in navbar.
 
 ## Admin Page
-Admin Page stores user ID, username and encrypted password of all users. Admin can add and delete users.
-Admin Username: 'akniet' Password: '123'
+Admin Page stores user ID, username, role, creation date, updated date of all users. Admin can add, edit and delete users.
+Admin also can add items (in my case, Space Objects) to the main page.
+Admin Username: 'akniet' Password: '1234567'
 
 ## Features
-- Current weather information (temperature, description, icon, date, location, time, etc.).
-- City information from Wikipedia.
-- Highlights such as humidity, clouds, wind, sunrise, sunset, and feels-like temperature.
+- APOD for today and any date from 2000.01.01 until today.
+- Along with APOD title, date and explanation of the photo/video.
+- TOP-10 NASA news.
+- Profile for user, where user can change user data(username/password).
+- Admin Page that stores all users' and items' data. 
 
 
 ## Technologies Used
@@ -65,6 +76,5 @@ Admin Username: 'akniet' Password: '123'
 - CSS (Bootstrap)
 - JavaScript
 - Node.js (Express)
-- OpenWeatherMap API
-- TimezoneDB API
-- Wikipedia API
+- NASA API(APOD)
+- News API
