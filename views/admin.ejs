@@ -206,9 +206,11 @@
                                     <td>
                                         <div class="d-flex justify-content-around">
                                             <button type="button" class="btn btn-warning editUserBtn me-3" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user-id="<%= user._id %>" data-username="<%= user.username %>"  data-role="<%= user.role %>">Edit</button>
-                                            <form action="/deleteUser/<%= user._id %>" method="post">
+                                            <form action="/deleteUser/<%= user._id %>" method="POST">
+                                                <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
+                                                                                     
                                         </div>
                                     </td>
                                 </tr>

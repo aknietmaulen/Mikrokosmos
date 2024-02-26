@@ -95,8 +95,14 @@ router.get('/', (req, res) => {
     res.redirect('/mainPage');
 });
 
-router.get('/mainPage', (req, res) => {
-    res.render('mainPage', { user: req.session.user });
+router.get('/mainPage', async (req, res) => {
+    try {
+        const items = await Item.find(); // Fetch items from the database
+        res.render('mainPage', { user: req.session.user, items: items }); // Pass items to the template rendering
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 
@@ -149,7 +155,6 @@ router.post('/addUser', async (req, res) => {
 });
 
 
-
 router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
     const userId = req.params.userId;
 
@@ -162,6 +167,7 @@ router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 
 router.post('/editUser',  isAuthenticated, async (req, res) => {
@@ -223,18 +229,18 @@ router.delete('/deleteItem/:itemId', isAuthenticated, async (req, res) => {
 
 router.post('/editItem', upload.array('newItemImages', 3), async (req, res) => {
     try {
-        const { itemId, itemName, itemRussianName, itemDescriptionEnglish, itemDescriptionRussian } = req.body;
+        const { itemId, itemNameEnglish, itemNameRussian, itemDescriptionEnglish, itemDescriptionRussian } = req.body;
         const newPictures = req.files.map(file => file.path);
 
         const updatedItem = await Item.findByIdAndUpdate(itemId, {
             $set: {
-                'names.english': itemName,
-                'names.russian': itemRussianName,
+                'names.english': itemNameEnglish,
+                'names.russian': itemNameRussian,
                 'descriptions.english': itemDescriptionEnglish,
                 'descriptions.russian': itemDescriptionRussian,
                 $push: { pictures: { $each: newPictures } }
             }
-        }, { new: true });
+        },{ new: true });
 
         res.redirect('/admin');
     } catch (error) {
@@ -242,7 +248,6 @@ router.post('/editItem', upload.array('newItemImages', 3), async (req, res) => {
         res.status(500).send('Error editing item');
     }
 });
-
 
 
 router.get('/account', isAuthenticated, (req, res) => {
@@ -274,23 +279,27 @@ router.put('/change-password', isAuthenticated, async (req, res) => {
     res.render('account', { user: req.session.user });
 });
 
+// router.get('/history', isAuthenticated, async (req, res) => {
+//     const user = req.session.user;
+//     res.render('history', { user: user, quizzes: quizzes });
+// });
+
+
 router.get('/apod', async (req, res) => {
     try {
         let date = req.query.date;
 
         if (!date || date === 'today') {
             // If date is not provided or 'today' is requested, fetch today's date
-            date = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            date = new Date().toISOString().split('T')[0]; 
         }
 
-        const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb'; // Replace with your actual NASA API key
+        const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb';
         const apodUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
 
-        // Fetch Astronomy Picture of the Day from NASA API
         const response = await fetch(apodUrl);
         const apodData = await response.json();
 
-        // Save APOD data to the database if user is logged in
         if (req.session.user) {
             const apod = new APOD({
                 userId: req.session.user._id,
@@ -301,7 +310,6 @@ router.get('/apod', async (req, res) => {
             await apod.save();
         }
 
-        // Render the apod.ejs template with the fetched data and the user variable
         res.render('apod', { apodData: apodData, user: req.session.user });
     } catch (error) {
         console.error('Error fetching Astronomy Picture of the Day:', error);
@@ -344,101 +352,3 @@ router.get('/nasa_news', async (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-/*
-
-router.post('/weather', isAuthenticated, async (req, res) => {
-    const { city } = req.body;
-    
-    const apiKey = '7445e570dcfb27be27f536a55fe702f4';
-    const currentWeatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
-
-
-    try {
-        const currentWeatherResponse = await fetch(currentWeatherUrl);
-        const currentWeatherData = await currentWeatherResponse.json();
-
-        const forecastResponse = await fetch(forecastUrl);
-        const forecastData = await forecastResponse.json();
-        
-        let lat = currentWeatherData.coord.lat;
-        let lon = currentWeatherData.coord.lon;
-
-
-        const timezoneUrl = `http://api.timezonedb.com/v2.1/get-time-zone?key=KJD9DK60HXSW&format=json&by=position&lat=${lat}&lng=${lon}`
-        const timezoneResponse = await fetch(timezoneUrl);
-        const timezoneData = await timezoneResponse.json();
-
-        const wikipediaUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${city}`;
-        const wikipediaResponse = await fetch(wikipediaUrl);
-        const wikipediaData = await wikipediaResponse.json();
-        let cityInfo = '';
-
-        if (wikipediaData.extract) {
-            const sentences = wikipediaData.extract.split('.').slice(0, 5);
-            cityInfo = sentences.join('.') + '.';
-        }
-
-        let date = new Date();
-        let day = date.getDate();
-        let monthIndex = date.getMonth();
-        let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        let month = monthNames[monthIndex];
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-        day = (day < 10 ? '0' : '') + day;
-        hours = (hours < 10 ? '0' : '') + hours;
-        minutes = (minutes < 10 ? '0' : '') + minutes;
-        let formattedDate = day + ' ' + month + ' ' + hours + ':' + minutes;
-
-
-        const responseData = {
-            city: city,
-            currentWeather: currentWeatherData,
-            forecast: forecastData,
-            timezone: timezoneData,
-            timestamp: formattedDate,
-            cityInfo: cityInfo
-        };
-
-        const user = req.session.user;
-        user.history.push(responseData);
-        User.db.collection('weather').insertOne(
-            {
-                username: user._id,
-                city: city,
-                currentWeather: currentWeatherData,
-                forecast: forecastData,
-                timezone: timezoneData,
-                timestamp: formattedDate,
-                cityInfo: cityInfo
-            }
-        );
-        await User.findByIdAndUpdate(user._id, { history: user.history }, { new: true });
-
-        const coordinates = {
-            lat: currentWeatherData.coord.lat,
-            lon: currentWeatherData.coord.lon
-        };
-        res.render('script', { weatherData: responseData, coordinates });
-       
-    } catch (error) {
-        console.error('Error fetching weather data:', error);
-    }
-});
-
-
-
-router.get('/weather/:cardId', isAuthenticated, async (req, res) => {
-    const cardId = req.params.cardId;
-    const history = req.session.user.history;
-
-    res.render('script', { weatherData: history[cardId] });
-
-});
-*/

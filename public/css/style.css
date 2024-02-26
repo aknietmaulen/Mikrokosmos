@@ -15,6 +15,10 @@ body {
     min-height: 100vh; 
 }
 
+img:hover{
+    transition: transform 0.5s ease;
+    transform: scale(1.01);
+}
 footer {
     background-color: black;
     color: white;
