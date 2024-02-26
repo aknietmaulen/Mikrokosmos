@@ -6,6 +6,7 @@ const APOD = require('../models/apod');
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads') 
@@ -24,6 +25,21 @@ const isAuthenticated = (req, res, next) => {
         res.redirect('/login');
     }
 };
+
+router.get('/', (req, res) => {
+    res.redirect('/mainPage');
+});
+
+router.get('/mainPage', async (req, res) => {
+    try {
+        const items = await Item.find(); // Fetch items from the database
+        res.render('mainPage', { user: req.session.user, items: items }); // Pass items to the template rendering
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 router.get('/login', (req, res) => {
     res.render('login', { message: false });
 });
@@ -87,20 +103,6 @@ router.post('/signup', async (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/mainPage');
-});
-
-router.get('/', (req, res) => {
-    res.redirect('/mainPage');
-});
-
-router.get('/mainPage', async (req, res) => {
-    try {
-        const items = await Item.find(); // Fetch items from the database
-        res.render('mainPage', { user: req.session.user, items: items }); // Pass items to the template rendering
-    } catch (error) {
-        console.error('Error fetching items:', error);
-        res.status(500).send('Internal Server Error');
-    }
 });
 
 
@@ -174,8 +176,6 @@ router.post('/editUser', isAuthenticated, async (req, res) => {
     }
 });
 
-
-
 router.post('/addUser', async (req, res) => {
     const { username, password, role } = req.body; 
 
@@ -220,8 +220,6 @@ router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
 });
 
 
-
-
 router.post('/admin/add-item', upload.array('pictures', 3), async (req, res) => {
     try {
         const { nameEnglish, nameRussian, descriptionEnglish, descriptionRussian } = req.body;
@@ -248,19 +246,6 @@ router.post('/admin/add-item', upload.array('pictures', 3), async (req, res) => 
     }
 });
 
-router.delete('/deleteItem/:itemId', isAuthenticated, async (req, res) => {
-    const itemId = req.params.itemId;
-
-    try {
-        await Item.findByIdAndDelete(itemId);
-
-        res.redirect('/admin');
-    } catch (error) {
-        console.error('Error deleting item:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
 router.post('/editItem', upload.array('newItemImages', 3), async (req, res) => {
     try {
         const { itemId, itemNameEnglish, itemNameRussian, itemDescriptionEnglish, itemDescriptionRussian } = req.body;
@@ -283,6 +268,18 @@ router.post('/editItem', upload.array('newItemImages', 3), async (req, res) => {
     }
 });
 
+router.delete('/deleteItem/:itemId', isAuthenticated, async (req, res) => {
+    const itemId = req.params.itemId;
+
+    try {
+        await Item.findByIdAndDelete(itemId);
+
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error deleting item:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 router.get('/account', isAuthenticated, (req, res) => {
     res.render('account', { user: req.session.user, message: false});
@@ -312,12 +309,6 @@ router.put('/change-password', isAuthenticated, async (req, res) => {
     req.session.user = user;
     res.render('account', { user: req.session.user });
 });
-
-// router.get('/history', isAuthenticated, async (req, res) => {
-//     const user = req.session.user;
-//     res.render('history', { user: user, quizzes: quizzes });
-// });
-
 
 router.get('/apod', async (req, res) => {
     try {

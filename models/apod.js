@@ -9,5 +9,4 @@ const apodSchema = new Schema({
 });
 
 const APOD = mongoose.model('APOD', apodSchema);
-
 module.exports = APOD;
