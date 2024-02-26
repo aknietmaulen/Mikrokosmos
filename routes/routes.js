@@ -317,7 +317,7 @@ router.get('/history', isAuthenticated, async (req, res) => {
     res.render('history', { user: user, apodHistory: apodHistory });
 });
 
-router.get('/apod', async (req, res) => {
+router.get('/apod', isAuthenticated, async (req, res) => {
     try {
         let date = req.query.date;
 
@@ -348,7 +348,7 @@ router.get('/apod', async (req, res) => {
     }
 });
 
-router.get('/nasa_news', async (req, res) => {
+router.get('/nasa_news', isAuthenticated, async (req, res) => {
     try {
         const apiKey = 'ea350dec87474ac890206d04545305b3';
         const theme = 'nasa';
