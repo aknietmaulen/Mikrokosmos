@@ -36,7 +36,6 @@ footer {
     margin: 0;
 }
 
-
 #contact {
     display: flex;
     flex-direction: column;
@@ -60,12 +59,6 @@ h1, h2 {
   
 .day1, .day2, .day3, .day4, .day5 {
     flex: 1;
-}
-
-ul, li{
-    list-style: none;
-    margin: 0;
-    padding: 0;
 }
 
 .navbar {
@@ -104,30 +97,6 @@ ul, li{
     }
 
     
-}
-
-
-@media (min-width: 577px) {
-    
-
-    #times{
-        display: flex;
-        justify-content: space-between;
-    }
-    #airQua{
-        display: flex;
-        justify-content: space-between;
-    
-    }
-}
-
-@media (min-width: 460px) {
-    
-    #airQua{
-        display: flex;
-        justify-content: space-between;
-    
-    }
 }
 
 .wrapper {

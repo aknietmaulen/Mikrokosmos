@@ -3,11 +3,9 @@ const router = express.Router();
 const User = require('../models/user');
 const Item = require('../models/item');
 const APOD = require('../models/apod');
+const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
-const { ObjectId } = require('mongodb');
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads') 
@@ -124,6 +122,59 @@ router.get('/admin', isAuthenticated, async (req, res) => {
 });
 
 
+router.post('/editUser', isAuthenticated, async (req, res) => {
+    const { userId, username, role } = req.body; // Destructure userId, username, and role
+
+    try {
+        // Validate userId
+        if (!ObjectId.isValid(userId)) {
+            return res.status(400).send('Invalid userId');
+        }
+
+        // Update user
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            username,
+            role
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).send('User not found');
+        }
+
+        return res.redirect('/admin'); // Redirect after updating user
+    } catch (error) {
+        console.error('Error updating user:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+});
+
+router.post('/editUser', isAuthenticated, async (req, res) => {
+    const { userId, username, role } = req.body; // Destructure userId, username, and role
+
+    try {
+        // Validate userId
+        if (!ObjectId.isValid(userId)) {
+            return res.status(400).send('Invalid userId');
+        }
+
+        // Update user
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            username,
+            role
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).send('User not found');
+        }
+
+        return res.redirect('/admin'); // Redirect after updating user
+    } catch (error) {
+        console.error('Error updating user:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 router.post('/addUser', async (req, res) => {
     const { username, password, role } = req.body; 
@@ -169,23 +220,6 @@ router.post('/deleteUser/:userId', isAuthenticated, async (req, res) => {
 });
 
 
-
-router.post('/editUser',  isAuthenticated, async (req, res) => {
-    const userId = req.body.userId;
-    const updatedUsername = req.body.username;
-    const updatedRole = req.body.role;
-    const updatedTime = Date.now();
-
-    try {
-        await User.db.collection('users').updateOne({ _id: new ObjectId(userId) }, { $set: { username: updatedUsername, role: updatedRole, updatedAt: updatedTime } });
-
-        res.redirect('/admin');
-    } catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).send('Internal Server Error');
-    }
-
-});
 
 
 router.post('/admin/add-item', upload.array('pictures', 3), async (req, res) => {
@@ -290,7 +324,6 @@ router.get('/apod', async (req, res) => {
         let date = req.query.date;
 
         if (!date || date === 'today') {
-            // If date is not provided or 'today' is requested, fetch today's date
             date = new Date().toISOString().split('T')[0]; 
         }
 

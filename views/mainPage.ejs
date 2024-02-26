@@ -49,7 +49,7 @@
                     <% if (user && user.username) { %>
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-dark btn-outline-primary dropdown-toggle text-light" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-fill"></i>
                                     <%= user.username %>
                                 </button>
@@ -63,10 +63,9 @@
                         </ul>
                     <% } else { %>
                         <form action="/login" method="get" class="ms-2">
-                            <button class="btn btn-outline-primary text-white" type="submit">Login</button>
+                            <button class="btn btn-dark btn-outline-primary text-white" type="submit">Login</button>
                         </form>
                     <% } %>
-                    
                 </div>        
             </div>
         </nav>
@@ -158,7 +157,6 @@
             <div class="text-center col-md-9 col-sm-12 mx-auto">
                 <p>&copy; 2023 Akniet Maulen | SE-2204 </p>
                 <p>Email: akniet.maulenova.2017@gmail.com</p>
-                <p>Connect with me: <a href="https://t.me/maulen_akniet" target="_blank">Telegram</a></p>
                 <p>Project: Mikrokosmos | NASA App</p>
             </div>
         </footer>

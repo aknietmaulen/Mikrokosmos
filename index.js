@@ -13,7 +13,6 @@ app.use(methodOverride('_method'));
 app.use('/public/uploads', express.static('public/uploads'));
 
 
-
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.MONGODB_URI)
