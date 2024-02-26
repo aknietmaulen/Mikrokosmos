@@ -18,6 +18,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+router.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
+
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
         next();
