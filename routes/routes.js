@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const Item = require('../models/item');
+const APOD = require('../models/apod');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const { ObjectId } = require('mongodb');
-const axios = require('axios'); 
 
 
 const storage = multer.diskStorage({
@@ -95,40 +95,9 @@ router.get('/', (req, res) => {
     res.redirect('/mainPage');
 });
 
-router.get('/mainPage', async (req, res) => {
-    try {
-        const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb';
-
-        const today = new Date();
-        const dates = [];
-        for (let i = 1; i <= 6; i++) {
-            const previousDate = new Date(today);
-            previousDate.setDate(today.getDate() - i);
-            dates.push(previousDate.toISOString().split('T')[0]); // Get date in format YYYY-MM-DD
-        }
-
-        // Fetch Astronomy Photo of the Day for each of the previous 6 days
-        const apodPromises = dates.map(date =>
-            axios.get(`https://api.nasa.gov/planetary/apod?date=${date}&api_key=${apiKey}`)
-        );
-
-        // Wait for all API requests to complete
-        const responses = await Promise.all(apodPromises);
-
-        // Extract the APOD data from each response
-        const apods = responses.map(response => response.data);
-
-        if (req.session.user) {
-            res.render('mainPage', { user: req.session.user, apods: apods });
-        } else {
-            res.render('mainPage', { user: "notUser", apods: apods });
-        }
-    } catch (error) {
-        console.error('Error fetching APOD:', error);
-        res.status(500).send('Internal Server Error');
-    }
+router.get('/mainPage', (req, res) => {
+    res.render('mainPage', { user: req.session.user });
 });
-
 
 
 router.get('/admin', isAuthenticated, async (req, res) => {
@@ -303,6 +272,41 @@ router.put('/change-password', isAuthenticated, async (req, res) => {
     const user = await User.findByIdAndUpdate(req.session.user._id, { password: newPass }, { new: true });
     req.session.user = user;
     res.render('account', { user: req.session.user });
+});
+
+router.get('/apod', async (req, res) => {
+    try {
+        let date = req.query.date;
+
+        if (!date || date === 'today') {
+            // If date is not provided or 'today' is requested, fetch today's date
+            date = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        }
+
+        const apiKey = '8sRU2v2QZRP1KlDDaD0hm8j0sDQHQO2vrwnf8gxb'; // Replace with your actual NASA API key
+        const apodUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
+
+        // Fetch Astronomy Picture of the Day from NASA API
+        const response = await fetch(apodUrl);
+        const apodData = await response.json();
+
+        // Save APOD data to the database if user is logged in
+        if (req.session.user) {
+            const apod = new APOD({
+                userId: req.session.user._id,
+                title: apodData.title,
+                date: date,
+                apodData: apodData
+            });
+            await apod.save();
+        }
+
+        // Render the apod.ejs template with the fetched data and the user variable
+        res.render('apod', { apodData: apodData, user: req.session.user });
+    } catch (error) {
+        console.error('Error fetching Astronomy Picture of the Day:', error);
+        res.status(500).send('Error fetching Astronomy Picture of the Day');
+    }
 });
 
 

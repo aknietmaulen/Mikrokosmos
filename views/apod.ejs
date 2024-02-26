@@ -10,39 +10,14 @@
 
     <title>Astronomy Picture of the Day</title>
     <style>
-        .containerNews {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
+        body {
+            background-color:  rgb(0, 0, 57);
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .article {
-            background-color: #1D1C1F;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .article h2 {
-            margin-top: 0;
-        }
-        .article p {
-            color: #fff;
-        }
-        .article a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .article a:hover {
-            text-decoration: underline;
-        }
-        .article img {
+        .img-fluid {
             max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
+            height: auto; 
+            border-radius: 3%;
+            border-width: 3%;
         }
     </style>
 </head>
@@ -63,31 +38,74 @@
                             <a class="nav-link text-light" href="/nasa_news">News</a>
                         </li>
                     </ul>
-                    <% if (user == "notUser") { %>
-                        <form action="/login" method="get" class="ms-2">
-                            <button class="btn btn-outline-primary text-white" type="submit">Login</button>
-                        </form>
-                    <% } else { %>
+                    <% if (user && user.username) { %>
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-fill"></i>
-                                    <%= user.username%>
+                                    <%= user.username %>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/account">Profile</a></li>
                                     <li><a class="dropdown-item" href="/history">History</a></li>
                                     <li><hr class="dropdown-divider"></li>    
                                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
+                    <% } else { %>
+                        <form action="/login" method="get" class="ms-2">
+                            <button class="btn btn-outline-primary text-white" type="submit">Login</button>
+                        </form>
                     <% } %>
+                    
                 </div>        
             </div>
         </nav>
     </header>
 
+    <main>
+        <div class="container py-5">
+            <div class="search-box">
+                <form class="d-flex" action="/apod" method="get" id="formDateSearch">
+                    <i class="bx bxs-map"></i>
+                    <input class="form-control" name="date" type="date" placeholder="Enter a date" name="date" aria-label="Search" id="dateSearch">
+                    <button class="btn btn-dark btn-outline text-light" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title text-light mt-5">Astronomy Picture of the Day</h2>
+            </div>
+        </div>
+        <div class="container pb-5 pt-2 col-10">
+            <div id="content" class="justify-content-center">
+                <% if (apodData.media_type === 'image') { %>
+                    <div class="text-center p-0">
+                        <img src="<%= apodData.url %>" class="img-fluid border d-inline-block" alt="APOD Image">
+                    </div>
+                <% } else if (apodData.media_type === 'video') { %>
+                    <!-- Adjusted code for displaying the video -->
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <div class="text-center">
+                                <div class="embed-responsive embed-responsive-16by9 p-0">
+                                    <iframe class="embed-responsive-item border d-inline-block" src="<%= apodData.url %>" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <div class="card-body">
+                    <h2 class="card-title text-light my-5"><%= apodData.title %></p></h2>
+                    <p class="text-light">Date: <%= apodData.date %></p>
+                    <p class="text-light">Explanation: <%= apodData.explanation %></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+
+         
     <div id="contact" class="container-fluid">
         <footer class="py-5">
             <div class="text-center col-md-9 col-sm-12 mx-auto">
@@ -98,8 +116,6 @@
             </div>
         </footer>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
