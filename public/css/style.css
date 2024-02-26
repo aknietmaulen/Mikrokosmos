@@ -19,6 +19,10 @@ img:hover{
     transition: transform 0.5s ease;
     transform: scale(1.01);
 }
+button:hover{
+    transition: transform 0.5s ease;
+    transform: scale(1.01);
+}
 footer {
     background-color: black;
     color: white;
@@ -64,26 +68,10 @@ ul, li{
     padding: 0;
 }
 
-
-.card-item-day{
-    background-color: var(--surface);
-    color: var(--on-surface);
-    border-radius: 30px;
-    height: 100%;
-    width: 100%;
-    margin: 5px;
+.navbar {
+    background-color: #000248;
+    border-radius: 1%;
 }
-
-.icon_size{
-    width: 70px;
-    height: 70px;
-}
-
-.icon_mini{
-    width: 50px;
-    height: 50px;
-}
-
 .navbar-brand {
     margin-right: 10px;
 }
@@ -146,64 +134,11 @@ ul, li{
     display: flex;
 }
 
-#loadingIndicator{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-}
-
-.loader {
-    border: 8px solid #3498db;
-    border-top: 8px solid #f0f0f0;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-}
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-#itemForm {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#itemForm input[type="text"],
-#itemForm textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-#itemForm button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#itemForm button:hover {
-    background-color: #0056b3;
-}
-
-#itemForm input[type="file"] {
-    margin-bottom: 15px;
-}
 
 @media screen and (max-width: 600px) {
     #itemForm {

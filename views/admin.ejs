@@ -30,7 +30,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg container">
+        <nav class="navbar navbar-expand-lg container mb-2">
             <div class="container">
                 <a class="navbar-brand text-light" href="/">Mikrokosmos</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,224 +69,219 @@
             </div>
         </nav>
     </header>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="/addUser" method="post">
-                <div class="modal-body mb-2">
-                        <label for="name">User name</label>
-                        <input class="form-control" type="text" placeholder="User name..." name="username">
-                        <label for="password">Password</label>
-                        <input class="form-control" type="password" placeholder="Password..." name="password">
-                        <label for="role">Role</label>
-                        <select class="form-control" name="role">
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add User</button>
-                </div>
-            </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editUserModalLabel">Edit User</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="editUserForm" method="post" action="/editUser">
-                    <div class="modal-body">
-                        <input type="hidden" id="editUserId" name="userId">
-                        <label for="editUsername">User name</label>
-                        <input class="form-control" type="text" placeholder="Enter username" id="editUsername" name="username">
-                    
-                        <label for="editRole">Role</label>
-                        <select class="form-control" id="editRole" name="role">
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
+    <main>
+        <div class="modal fade my-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add User</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/addUser" method="post">
+                    <div class="modal-body mb-2">
+                            <label for="name">User name</label>
+                            <input class="form-control" type="text" placeholder="User name..." name="username">
+                            <label for="password">Password</label>
+                            <input class="form-control" type="password" placeholder="Password..." name="password">
+                            <label for="role">Role</label>
+                            <select class="form-control" name="role">
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="submit" class="btn btn-light button">Add User</button>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
-    </div>
     
-    <!-- Edit Item Modal -->
-    <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editItemForm" action="/editItem" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" id="editItemId" name="itemId">
-                        <div class="mb-3">
-                            <label for="editItemName" class="form-label">Name (English)</label>
-                            <input type="text" class="form-control" id="editItemName" name="itemName">
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="editUserModalLabel">Edit User</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editUserForm" method="post" action="/editUser">
+                        <div class="modal-body">
+                            <input type="hidden" id="editUserId" name="userId">
+                            <label for="editUsername">User name</label>
+                            <input class="form-control" type="text" placeholder="Enter username" id="editUsername" name="username">
+                        
+                            <label for="editRole">Role</label>
+                            <select class="form-control" id="editRole" name="role">
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="editItemRussianName" class="form-label">Name (Russian)</label>
-                            <input type="text" class="form-control" id="editItemRussianName" name="itemRussianName">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
-                        <div class="mb-3">
-                            <label for="editItemDescriptionEnglish" class="form-label">Description (English)</label>
-                            <textarea class="form-control" id="editItemDescriptionEnglish" name="itemDescriptionEnglish" rows="3"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editItemDescriptionRussian" class="form-label">Description (Russian)</label>
-                            <textarea class="form-control" id="editItemDescriptionRussian" name="itemDescriptionRussian" rows="3"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editNewItemImages" class="form-label">New Images</label>
-                            <input type="file" class="form-control" id="editNewItemImages" name="newItemImages" multiple>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-
-
-
-
-    <section class="a-table container mb-5">
-        <div class="row">
-            <div class="col">
-                <h2 class="text-center mb-4">Users</h2>
-                <button type="button" class="btn btn-primary d-flex justify-content-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Add User</button>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                            <th>ID</th>
-                            <th>User</th>
-                            <th>Role</th>
-                            <th>Creation Date</th>
-                            <th>Updated Date</th>
-                            <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% users.forEach(user => { %>
-                                <tr>
-                                    <td><%= user._id %></td>
-                                    <td><%= user.username %></td>
-                                    <td><%= user.role %></td>
-                                    <td>
-                                        <% 
-                                        const createdAt = new Date(user.createdAt);
-                                        const formattedDate = createdAt.getDate() + '-' + (createdAt.getMonth() + 1) + '-' + createdAt.getFullYear();
-                                        %>
-                                        <%= formattedDate %>
-                                    </td>
-                                    <td>
-                                        <% 
-                                        const updatedAt = new Date(user.updatedAt);
-                                        const formattedDate2 = updatedAt.getDate() + '-' + (updatedAt.getMonth() + 1) + '-' + updatedAt.getFullYear();
-                                        %>
-                                        <%= formattedDate2 %>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex justify-content-around">
-                                            <button type="button" class="btn btn-warning editUserBtn me-3" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user-id="<%= user._id %>" data-username="<%= user.username %>"  data-role="<%= user.role %>">Edit</button>
-                                            <form action="/deleteUser/<%= user._id %>" method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                                                                     
-                                        </div>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        </tbody>
-                    </table>
+        
+        <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editItemForm" action="/editItem" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="editItemId" name="itemId">
+                            <div class="mb-3">
+                                <label for="editItemNameEnglish" class="form-label">Name (English)</label>
+                                <input type="text" class="form-control" id="editItemNameEnglish" name="itemNameEnglish">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editItemNameRussian" class="form-label">Name (Russian)</label>
+                                <input type="text" class="form-control" id="editItemNameRussian" name="itemNameRussian">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editItemDescriptionEnglish" class="form-label">Description (English)</label>
+                                <textarea class="form-control" id="editItemDescriptionEnglish" name="itemDescriptionEnglish" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editItemDescriptionRussian" class="form-label">Description (Russian)</label>
+                                <textarea class="form-control" id="editItemDescriptionRussian" name="itemDescriptionRussian" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editNewItemImages" class="form-label">New Images</label>
+                                <input type="file" class="form-control" id="editNewItemImages" name="newItemImages" multiple>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <div class="col-8 align-items-center mx-auto">
-        <form action="/admin/add-item" method="POST"  enctype="multipart/form-data" onsubmit=" return validateForm()">
-            <div class="mb-3">
-                <label for="pictures" class="form-label">Pictures (Upload 3 Images)</label>
-                <input type="file" class="form-control" id="pictures" name="pictures" accept="image/*" multiple required>
-            </div>
-            <div class="mb-3">
-                <label for="nameEnglish" class="form-label">Name (English)</label>
-                <input type="text" class="form-control" id="nameEnglish" name="nameEnglish" required>
-            </div>
-            <div class="mb-3">
-                <label for="nameRussian" class="form-label">Name (Russian)</label>
-                <input type="text" class="form-control" id="nameRussian" name="nameRussian" required>
-            </div>
-            <div class="mb-3">
-                <label for="descriptionEnglish" class="form-label">Description (English)</label>
-                <textarea class="form-control" id="descriptionEnglish" name="descriptionEnglish" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="descriptionRussian" class="form-label">Description (Russian)</label>
-                <textarea class="form-control" id="descriptionRussian" name="descriptionRussian" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Item</button>
-        </form>
-    </div>
     
-
-    <section class="a-table container mt-5">  
-        <div class="table-responsive">
-            <table class="table">
-                <h2>Items</h2>
-                <thead>
-                    <tr>
-                        <th>Name (English)</th>
-                        <th>Name (Russian)</th>
-                        <th>Description (English)</th>
-                        <th>Description (Russian)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% items.forEach(function(item) { %>
-                        <tr>
-                            <td><%= item.names.english %></td>
-                            <td><%= item.names.russian %></td>
-                            <td><%= item.descriptions.english %></td>
-                            <td><%= item.descriptions.russian %></td>
-                            <td>
-                                <div class="d-flex justify-content-around">
-                                    <button type="button" class="btn btn-warning editItemBtn me-3" data-bs-toggle="modal" data-bs-target="#editItemModal" data-item-id="<%= item._id %>" data-item-name="<%= item.names.english %>" data-item-russian-name="<%= item.names.russian %>" data-item-description-english="<%= item.descriptions.english %>" data-item-description-russian="<%= item.descriptions.russian %>">Edit</button>
-                                    <form action="/deleteItem/<%= item._id %>?_method=DELETE" method="post">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+        <section class="a-table container mb-5">
+            <div class="row">
+                <div class="col">
+                    <h2 class="text-center mb-4">Users</h2>
+                    <button type="button" class="btn btn-light button d-flex justify-content-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Add User</button>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Creation Date</th>
+                                <th>Updated Date</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach(user => { %>
+                                    <tr>
+                                        <td><%= user._id %></td>
+                                        <td><%= user.username %></td>
+                                        <td><%= user.role %></td>
+                                        <td>
+                                            <% 
+                                            const createdAt = new Date(user.createdAt);
+                                            const formattedDate = createdAt.getDate() + '-' + (createdAt.getMonth() + 1) + '-' + createdAt.getFullYear();
+                                            %>
+                                            <%= formattedDate %>
+                                        </td>
+                                        <td>
+                                            <% 
+                                            const updatedAt = new Date(user.updatedAt);
+                                            const formattedDate2 = updatedAt.getDate() + '-' + (updatedAt.getMonth() + 1) + '-' + updatedAt.getFullYear();
+                                            %>
+                                            <%= formattedDate2 %>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex justify-content-around">
+                                                <button type="button" class="btn btn-warning editUserBtn me-3" data-bs-toggle="modal" data-bs-target="#editUserModal" data-user-id="<%= user._id %>" data-username="<%= user.username %>"  data-role="<%= user.role %>">Edit</button>
+                                                <form action="/deleteUser/<%= user._id %>" method="POST">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                                                                         
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <div class="col-8 align-items-center mx-auto">
+            <form action="/admin/add-item" method="POST"  enctype="multipart/form-data" onsubmit=" return validateForm()">
+                <div class="mb-3">
+                    <label for="pictures" class="form-label">Pictures (Upload 3 Images)</label>
+                    <input type="file" class="form-control" id="pictures" name="pictures" accept="image/*" multiple required>
+                </div>
+                <div class="mb-3">
+                    <label for="nameEnglish" class="form-label">Name (English)</label>
+                    <input type="text" class="form-control" id="nameEnglish" name="nameEnglish" required>
+                </div>
+                <div class="mb-3">
+                    <label for="nameRussian" class="form-label">Name (Russian)</label>
+                    <input type="text" class="form-control" id="nameRussian" name="nameRussian" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descriptionEnglish" class="form-label">Description (English)</label>
+                    <textarea class="form-control" id="descriptionEnglish" name="descriptionEnglish" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="descriptionRussian" class="form-label">Description (Russian)</label>
+                    <textarea class="form-control" id="descriptionRussian" name="descriptionRussian" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-light button">Add Item</button>
+            </form>
         </div>
         
-    </section>  
-        
     
-
+        <section class="a-table container mt-5">  
+            <div class="table-responsive">
+                <table class="table">
+                    <h2>Items</h2>
+                    <thead>
+                        <tr>
+                            <th>Name (English)</th>
+                            <th>Name (Russian)</th>
+                            <th>Description (English)</th>
+                            <th>Description (Russian)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% items.forEach(function(item) { %>
+                            <tr>
+                                <td><%= item.names.english %></td>
+                                <td><%= item.names.russian %></td>
+                                <td><%= item.descriptions.english %></td>
+                                <td><%= item.descriptions.russian %></td>
+                                <td>
+                                    <div class="d-flex justify-content-around">
+                                        <button type="button" class="btn btn-warning editItemBtn me-3" data-bs-toggle="modal" data-bs-target="#editItemModal" data-item-id="<%= item._id %>" data-item-name-english="<%= item.names.english %>" data-item-name-russian="<%= item.names.russian %>" data-item-description-english="<%= item.descriptions.english %>" data-item-description-russian="<%= item.descriptions.russian %>">Edit</button>
+                                        <form action="/deleteItem/<%= item._id %>?_method=DELETE" method="post">
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </section>      
+    </main>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
                 let editButtons = document.querySelectorAll('.editItemBtn');
@@ -294,14 +289,14 @@
                 editButtons.forEach(function(button) {
                     button.addEventListener('click', function() {
                         let itemId = button.getAttribute('data-item-id');
-                        let itemName = button.getAttribute('data-item-name');
-                        let itemRussianName = button.getAttribute('data-item-russian-name');
+                        let itemNameEnglish = button.getAttribute('data-item-name-english');
+                        let itemNameRussian = button.getAttribute('data-item-name-russian');
                         let itemDescriptionEnglish = button.getAttribute('data-item-description-english');
                         let itemDescriptionRussian = button.getAttribute('data-item-description-russian');
 
                         document.getElementById('editItemId').value = itemId;
-                        document.getElementById('editItemName').value = itemName;
-                        document.getElementById('editItemRussianName').value = itemRussianName;
+                        document.getElementById('editItemNameEnglish').value = itemNameEnglish;
+                        document.getElementById('editItemNameRussian').value = itemNameRussian;
                         document.getElementById('editItemDescriptionEnglish').value = itemDescriptionEnglish;
                         document.getElementById('editItemDescriptionRussian').value = itemDescriptionRussian;
                     });
