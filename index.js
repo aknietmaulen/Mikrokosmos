@@ -26,6 +26,11 @@ app.use(session({
     cookie: { maxAge: 360000 }
 }));
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render('error');
+});
+
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use('/', routes);
