@@ -310,6 +310,13 @@ router.put('/change-password', isAuthenticated, async (req, res) => {
     res.render('account', { user: req.session.user });
 });
 
+
+router.get('/history', isAuthenticated, async (req, res) => {
+    const user = req.session.user;
+    const apodHistory = await APOD.find({ userId: req.session.user._id }).sort({ date: -1 });
+    res.render('history', { user: user, apodHistory: apodHistory });
+});
+
 router.get('/apod', async (req, res) => {
     try {
         let date = req.query.date;
@@ -340,8 +347,6 @@ router.get('/apod', async (req, res) => {
         res.status(500).send('Error fetching Astronomy Picture of the Day');
     }
 });
-
-
 
 router.get('/nasa_news', async (req, res) => {
     try {
