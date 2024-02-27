@@ -41,12 +41,17 @@ router.get('/', (req, res) => {
 router.get('/mainPage', async (req, res) => {
     try {
         const items = await Item.find(); // Fetch items from the database
-        res.render('mainPage', { user: req.session.user, items: items }); // Pass items to the template rendering
+        if (req.session.user) {
+            res.render('mainPage', { user: req.session.user, items: items });
+        } else {
+            res.render('mainPage', { user: "notUser", items: items });
+        }
     } catch (error) {
         console.error('Error fetching items:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 router.get('/login', (req, res) => {
     res.render('login', { message: false });
@@ -69,15 +74,16 @@ router.post('/login', async (req, res) => {
         req.session.user = user;
         
         if (req.session.user.role === 'admin') {
-            return res.redirect('/admin');
+            res.redirect('/admin');
         } else {
-            return res.redirect('/mainPage');
+            res.redirect('/mainPage');
         }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).render('error', { errorMessage: 'Internal Server Error' });
     }
 });
+
 
 // Signup route
 router.get('/signup', (req, res) => {
