@@ -110,7 +110,7 @@ router.post('/signup', async (req, res) => {
 // Logout route
 router.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/mainPage');
+    res.redirect('/login');
 });
 
 
