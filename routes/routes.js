@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
         if (req.session.user.role === 'admin') {
             res.redirect('/admin');
         } else {
-            res.redirect('/');
+            res.redirect('/mainPage');
         }
     } catch (error) {
         console.error('Error:', error);
