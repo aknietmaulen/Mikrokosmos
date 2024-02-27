@@ -19,13 +19,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.use(session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-}));
-
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
         next();
@@ -41,17 +34,12 @@ router.get('/', (req, res) => {
 router.get('/mainPage', async (req, res) => {
     try {
         const items = await Item.find(); // Fetch items from the database
-        if (req.session.user) {
-            res.render('mainPage', { user: req.session.user, items: items });
-        } else {
-            res.render('mainPage', { user: "notUser", items: items });
-        }
+        res.render('mainPage', { user: req.session.user, items: items }); // Pass items to the template rendering
     } catch (error) {
         console.error('Error fetching items:', error);
         res.status(500).send('Internal Server Error');
     }
 });
-
 
 router.get('/login', (req, res) => {
     res.render('login', { message: false });
@@ -63,12 +51,12 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ username });
 
         if (!user) {
-            return res.render('login', { message: "User not found" });
+            return res.render('login', { message: "user not found" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.render('login', { message: "Password is incorrect" });
+            return res.render('login', { message: "password is incorrect" });
         }
 
         req.session.user = user;
@@ -76,14 +64,13 @@ router.post('/login', async (req, res) => {
         if (req.session.user.role === 'admin') {
             res.redirect('/admin');
         } else {
-            res.redirect('/mainPage');
+            res.redirect('/');
         }
     } catch (error) {
         console.error('Error:', error);
         res.status(500).render('error', { errorMessage: 'Internal Server Error' });
     }
 });
-
 
 // Signup route
 router.get('/signup', (req, res) => {
@@ -116,7 +103,7 @@ router.post('/signup', async (req, res) => {
 // Logout route
 router.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/login');
+    res.redirect('/mainPage');
 });
 
 
