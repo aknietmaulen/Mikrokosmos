@@ -58,20 +58,20 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ username });
 
         if (!user) {
-            return res.render('login', { message: "user not found" });
+            return res.render('login', { message: "User not found" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.render('login', { message: "password is incorrect" });
+            return res.render('login', { message: "Password is incorrect" });
         }
 
         req.session.user = user;
         
         if (req.session.user.role === 'admin') {
-            res.redirect('/admin');
+            return res.redirect('/admin');
         } else {
-            res.redirect('/mainPage');
+            return res.redirect('/mainPage');
         }
     } catch (error) {
         console.error('Error:', error);
